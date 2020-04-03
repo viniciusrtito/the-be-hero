@@ -9,7 +9,7 @@ module.exports = {
       title,
       description,
       value,
-      ong_id
+      ong_id,
     });
 
     return response.json({ id });
@@ -30,10 +30,11 @@ module.exports = {
         "ongs.email",
         "ongs.whatsapp",
         "ongs.city",
-        "ongs.uf"
+        "ongs.uf",
       ]);
 
-    response.header("x-total-count", count["count(*)"]);
+    response.header("X-Total-Count", count["count(*)"]);
+    response.header("Access-Control-Expose-Headers", "X-Total-Count");
 
     return response.json(incidents);
   },
@@ -53,10 +54,8 @@ module.exports = {
       return response.status(401).json({ error: "Operation not permitted." });
     }
 
-    await connection("incidents")
-      .where("id", id)
-      .delete();
+    await connection("incidents").where("id", id).delete();
 
     return response.status(204).send();
-  }
+  },
 };

@@ -3,28 +3,38 @@ import { View, Image, Text, TouchableOpacity, Linking } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import logoImg from "../../assets/logo.png";
 import styles from "./styles";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 //**MailComposer(variavel) recebe tudo do pacote expo-mail-composer */
 import * as MailComposer from "expo-mail-composer";
 
 export default function Details() {
   const navigation = useNavigation();
-  const message =
-    "Olá APAD, estou entrando em contato pois gostaria de ajudar no caso com o valor de R$120,00";
+  const route = useRoute();
+  const incident = route.params.incident;
+  const message = `Olá ${
+    incident.name
+  }, estou entrando em contato pois gostaria de ajudar no caso "${
+    incident.title
+  }", com o valor de ${Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  }).format(incident.value)}`;
   function navigateBack() {
     navigation.goBack();
   }
 
   function sendMail() {
     MailComposer.composeAsync({
-      subject: "Herói do caso: Cadelinha atropelada",
-      recipients: ["viniciustito@gmail.com"],
+      subject: `Herói do caso: ${incident.title}`,
+      recipients: [incident.email],
       body: message
     });
   }
 
   function sendWhatsapp() {
-    Linking.openURL(`whatsapp://send?phone=5511958396039&text=${message}`);
+    Linking.openURL(
+      `whatsapp://send?phone=55${incident.whatsapp}&text=${message}`
+    );
   }
 
   return (
@@ -38,11 +48,18 @@ export default function Details() {
 
       <View style={styles.incident}>
         <Text style={[styles.incidentProperty, { marginTop: 0 }]}>ONG:</Text>
-        <Text style={styles.incidentValue}>APAD</Text>
+        <Text style={styles.incidentValue}>
+          {incident.name} de {incident.city}/{incident.uf}
+        </Text>
         <Text style={styles.incidentProperty}>CASO:</Text>
-        <Text style={styles.incidentValue}>Cadelinha atropelada</Text>
+        <Text style={styles.incidentValue}>{incident.title}</Text>
         <Text style={styles.incidentProperty}>VALOR:</Text>
-        <Text style={styles.incidentValue}>R$ 120,00</Text>
+        <Text style={styles.incidentValue}>
+          {Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+          }).format(incident.value)}
+        </Text>
       </View>
 
       <View style={styles.contactBox}>

@@ -21,15 +21,15 @@ export default function Incidents() {
 
   const navigation = useNavigation();
 
-  function navigateToDetail() {
-    navigation.navigate("Details");
+  function navigateToDetail(incident) {
+    navigation.navigate("Details", { incident });
   }
 
   async function loadIncidents() {
     const response = await api.get("incidents");
     setIncidents(response.data);
     setTotal(response.headers["x-total-count"]);
-    console.log("total no response: " + response.headers["X-total-count"]);
+    console.log("header-x: " + JSON.stringify(response.headers));
   }
 
   useEffect(() => {
@@ -41,7 +41,6 @@ export default function Incidents() {
       <View style={styles.header}>
         <Image source={logoImg} />
         <Text style={styles.headerText}>
-          {console.log("log total: " + total)}
           Total de <Text style={styles.headerTextBold}>{total} casos</Text>.
         </Text>
       </View>
@@ -71,7 +70,7 @@ export default function Incidents() {
             </Text>
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={navigateToDetail}
+              onPress={() => navigateToDetail(incident)}
             >
               <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
               <Feather name="arrow-right" size={16} color="#e02041" />
