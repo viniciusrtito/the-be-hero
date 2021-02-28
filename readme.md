@@ -1,1 +1,1 @@
-![alt text](https://github.com/viniciusrtito/the-be-hero/blob/master/mobile/assets/splash.png)
+![alt text](https://github.com/viniciusrtito/the-be-hero/blob/master/mobile/assets/splash.png?raw=true)
